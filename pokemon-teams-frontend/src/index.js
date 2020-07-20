@@ -16,12 +16,21 @@ document.addEventListener('DOMContentLoaded', (e) => {
             const trainerDiv = createCard(trainer)
             const main = document.querySelector('main')
             main.append(trainerDiv)
-            addPokemonLisTo(trainerDiv)
+            addPokemonLisTo(trainer, trainerDiv)
         })
     }
 
-    const addPokemonLisTo = (trainerDiv) => {
-        // iterate th
+    const addPokemonLisTo = (trainer, trainerDiv) => {
+        trainer.pokemons.forEach(pokemon => {
+            const pokemonLi = document.createElement("li")
+            pokemonLi.textContent = `${pokemon.nickname} (${pokemon.species})`
+            const releaseButton = document.createElement('button')
+            releaseButton.className = "release"
+            releaseButton.dataset.pokemonId = `${pokemon.id}`
+            releaseButton.textContent = "Release"
+            pokemonLi.append(releaseButton)
+            trainerDiv.getElementsByTagName("ul")[0].append(pokemonLi)
+        })
     }
 
     const createCard = (trainer) => {
@@ -39,6 +48,31 @@ document.addEventListener('DOMContentLoaded', (e) => {
         return trainerDivCard
     }
 
+    const releasePokemon = (pokemon) => {
+        document.addEventListener("click", (e) => {
+            if (e.target.className === "release") {
+                deleteClickedPokemon(e.target);
+            } 
+        })
+    }
+
+    const deleteClickedPokemon = (pokemonLi) => {
+        const pokemonId = pokemonLi.dataset.pokemonId
+        fetch(`${POKEMONS_URL}/${pokemonId}`, {
+            method: "DELETE"
+        }) 
+        .then(response => response.json())
+        .then(data => {
+            pokemonLi.parentElement.remove();
+        })
+    }
+
     initialLoadTrainersNStuff()
+    releasePokemon()
+
+
+
+    //add a listener for button clicks 
+        //if button has data-id field, delete request 
 
 })
