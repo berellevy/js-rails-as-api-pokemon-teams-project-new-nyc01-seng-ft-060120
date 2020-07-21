@@ -92,10 +92,12 @@ document.addEventListener('DOMContentLoaded', (e) => {
             })
             .then(response => response.json())
             .then(pokemon => {
-                const trainerDiv = document.querySelector(`div.card[data-id="${pokemon.trainer_id}"]`)
-                console.log(trainerDiv)
-
-                renderPokemon(pokemon, trainerDiv)
+                if (pokemon.nickname) {
+                    const trainerDiv = document.querySelector(`div.card[data-id="${pokemon.trainer_id}"]`)
+                    renderPokemon(pokemon, trainerDiv)
+                } else {
+                window.alert(pokemon.error)
+                }
             })
     }
 

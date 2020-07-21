@@ -7,10 +7,8 @@ class PokemonsController < ApplicationController
 
 
     def create
-        pokemon = Pokemon.new(pokemon_params)
-        pokemon.nickname = Faker::Name.first_name
-        pokemon.species = Faker::Games::Pokemon.name
-        pokemon.save!
+        pokemon = Trainer.add_pokemon(pokemon_params[:trainer_id])
+        #pokemon = Trainer.find(pokemon_params[:trainer_id]).add_pokemon
         render json: pokemon
     end
 
